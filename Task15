@@ -1,0 +1,45 @@
+// TASK 15
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt(), W = sc.nextInt();
+        int[] wt = new int[n + 1];
+        int[] val = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            wt[i] = sc.nextInt();
+            val[i] = sc.nextInt();
+        }
+
+        int[][] dp = new int[n + 1][W + 1];
+
+        for (int i = 1; i <= n; i++)
+            for (int w = 0; w <= W; w++) {
+                dp[i][w] = dp[i-1][w];
+
+                if (wt[i] <= w)
+                    dp[i][w] = Math.max(dp[i][w],
+                        dp[i-1][w-wt[i]] + val[i]);
+            }
+
+        System.out.println("MaximumValue = " + dp[n][W]);
+
+        ArrayList<Integer> list = new ArrayList<>();
+        int w = W;
+
+        for (int i = n; i >= 1; i--) {
+            if (dp[i][w] != dp[i-1][w]) {
+                list.add(i);
+                w -= wt[i];
+            }
+        }
+
+        Collections.reverse(list);
+
+        System.out.println("SelectedItems:");
+        for (int x : list) System.out.print(x + " ");
+    }
+}
