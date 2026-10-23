@@ -1,0 +1,46 @@
+// TASK 6
+import java.util.*;
+
+public class Main {
+    static class Task {
+        char c;
+        int ready;
+        Task(char c, int r) { this.c = c; ready = r; }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), k = sc.nextInt();
+
+        Map<Character,Integer> m = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            char c = sc.next().charAt(0);
+            m.put(c, m.getOrDefault(c, 0) + 1);
+        }
+
+        PriorityQueue<Character> pq =
+            new PriorityQueue<>((a,b) -> m.get(b) - m.get(a));
+
+        pq.addAll(m.keySet());
+
+        Queue<Task> q = new LinkedList<>();
+        int time = 0;
+
+        while (!pq.isEmpty() || !q.isEmpty()) {
+            time++;
+
+            while (!q.isEmpty() && q.peek().ready <= time)
+                pq.add(q.poll().c);
+
+            if (!pq.isEmpty()) {
+                char c = pq.poll();
+                m.put(c, m.get(c) - 1);
+
+                if (m.get(c) > 0)
+                    q.add(new Task(c, time + k + 1));
+            }
+        }
+
+        System.out.println(time);
+    }
+}
