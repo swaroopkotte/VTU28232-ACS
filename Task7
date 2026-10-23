@@ -1,0 +1,56 @@
+// TASK 7
+import java.util.*;
+
+public class Main {
+    static class Node {
+        int v;
+        Node l, r;
+        Node(int v) { this.v = v; }
+    }
+
+    static Node build(int[] a) {
+        if (a[0] == -1) return null;
+
+        Node root = new Node(a[0]);
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+
+        int i = 1;
+
+        while (!q.isEmpty() && i < a.length) {
+            Node x = q.poll();
+
+            if (i < a.length && a[i] != -1) {
+                x.l = new Node(a[i]);
+                q.add(x.l);
+            }
+            i++;
+
+            if (i < a.length && a[i] != -1) {
+                x.r = new Node(a[i]);
+                q.add(x.r);
+            }
+            i++;
+        }
+
+        return root;
+    }
+
+    static int height(Node x) {
+        if (x == null) return -1;
+        return 1 + Math.max(height(x.l), height(x.r));
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] a = new int[n];
+
+        for (int i = 0; i < n; i++) a[i] = sc.nextInt();
+
+        int h = height(build(a));
+
+        System.out.println("Height = " + h);
+        System.out.println("Levels = " + (h + 1));
+    }
+}
