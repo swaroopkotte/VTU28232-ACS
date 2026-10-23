@@ -1,0 +1,28 @@
+// TASK 4
+import java.util.*;
+
+public class Main {
+    static boolean match(char a, char b) {
+        return (a=='('&&b==')') || (a=='['&&b==']') ||
+               (a=='{'&&b=='}') || (a=='<'&&b=='>');
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String s = sc.nextLine();
+        Stack<Character> st = new Stack<>();
+
+        for (char c : s.toCharArray()) {
+            if ("([{<".indexOf(c) >= 0)
+                st.push(c);
+            else if (")]}>".indexOf(c) >= 0) {
+                if (st.empty() || !match(st.pop(), c)) {
+                    System.out.println("INVALID");
+                    return;
+                }
+            }
+        }
+
+        System.out.println(st.empty() ? "VALID" : "INVALID");
+    }
+}
