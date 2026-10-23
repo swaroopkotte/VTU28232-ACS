@@ -1,0 +1,26 @@
+// TASK 2
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        Map<Integer,Integer> m = new HashMap<>();
+
+        for (int i = 0; i < n; i++) {
+            int x = sc.nextInt();
+            m.put(x, m.getOrDefault(x, 0) + 1);
+        }
+
+        int id = Integer.MAX_VALUE, max = 0;
+
+        for (int x : m.keySet()) {
+            if (m.get(x) > max || (m.get(x) == max && x < id)) {
+                max = m.get(x);
+                id = x;
+            }
+        }
+
+        System.out.println(id + " " + max);
+    }
+}
