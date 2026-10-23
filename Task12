@@ -1,0 +1,44 @@
+// TASK 12
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), m = sc.nextInt();
+
+        ArrayList<Integer>[] g = new ArrayList[n + 1];
+        int[] in = new int[n + 1];
+
+        for (int i = 1; i <= n; i++)
+            g[i] = new ArrayList<>();
+
+        for (int i = 0; i < m; i++) {
+            int u = sc.nextInt(), v = sc.nextInt();
+            g[u].add(v);
+            in[v]++;
+        }
+
+        Queue<Integer> q = new LinkedList<>();
+
+        for (int i = 1; i <= n; i++)
+            if (in[i] == 0) q.add(i);
+
+        int[] order = new int[n];
+        int count = 0;
+
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            order[count++] = u;
+
+            for (int v : g[u])
+                if (--in[v] == 0) q.add(v);
+        }
+
+        if (count < n) {
+            System.out.println("IMPOSSIBLE");
+        } else {
+            System.out.println("Course Order:");
+            for (int x : order) System.out.print(x + " ");
+        }
+    }
+}
