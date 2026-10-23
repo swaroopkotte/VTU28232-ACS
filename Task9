@@ -1,0 +1,51 @@
+// TASK 9
+import java.util.*;
+
+public class Main {
+    static class Item {
+        int value, list, pos;
+        Item(int v, int l, int p) {
+            value = v; list = l; pos = p;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int m = sc.nextInt(), k = sc.nextInt();
+        int[][] a = new int[m][];
+
+        PriorityQueue<Item> pq =
+            new PriorityQueue<>((x,y) -> x.value - y.value);
+
+        int total = 0;
+
+        for (int i = 0; i < m; i++) {
+            int n = sc.nextInt();
+            total += n;
+            a[i] = new int[n];
+
+            for (int j = 0; j < n; j++)
+                a[i][j] = sc.nextInt();
+
+            if (n > 0) pq.add(new Item(a[i][0], i, 0));
+        }
+
+        int[] b = new int[total];
+        int z = 0;
+
+        while (!pq.isEmpty()) {
+            Item x = pq.poll();
+            b[z++] = x.value;
+
+            if (x.pos + 1 < a[x.list].length)
+                pq.add(new Item(a[x.list][x.pos+1], x.list, x.pos+1));
+        }
+
+        System.out.println("Merged:");
+        for (int x : b) System.out.print(x + " ");
+
+        System.out.println("\nTopK:");
+        for (int i = total - 1, c = 0; i >= 0 && c < k; i--, c++)
+            System.out.print(b[i] + " ");
+    }
+}
