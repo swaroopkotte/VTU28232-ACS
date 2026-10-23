@@ -1,0 +1,72 @@
+// TASK 3
+import java.util.*;
+
+public class Main {
+    static class Node {
+        int data;
+        Node next;
+        Node(int d) { data = d; }
+    }
+
+    static void removeCycle(Node h) {
+        Node s = h, f = h;
+        do {
+            s = s.next;
+            f = f.next.next;
+        } while (s != f);
+
+        s = h;
+        while (s != f) {
+            s = s.next;
+            f = f.next;
+        }
+
+        Node p = s;
+        while (p.next != s) p = p.next;
+        p.next = null;
+    }
+
+    static Node reverse(Node h, int k) {
+        Node cur = h, newHead = null, tail = null;
+
+        while (cur != null) {
+            Node prev = null, start = cur;
+            int c = 0;
+
+            while (cur != null && c < k) {
+                Node next = cur.next;
+                cur.next = prev;
+                prev = cur;
+                cur = next;
+                c++;
+            }
+
+            if (newHead == null) newHead = prev;
+            else tail.next = prev;
+
+            tail = start;
+        }
+        return newHead;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(), k = sc.nextInt();
+
+        Node[] a = new Node[n];
+        for (int i = 0; i < n; i++) a[i] = new Node(sc.nextInt());
+        for (int i = 0; i < n - 1; i++) a[i].next = a[i + 1];
+
+        int pos = sc.nextInt();
+        if (pos >= 0) a[n - 1].next = a[pos];
+
+        if (pos >= 0) removeCycle(a[0]);
+
+        Node h = reverse(a[0], k);
+
+        while (h != null) {
+            System.out.print(h.data + " ");
+            h = h.next;
+        }
+    }
+}
